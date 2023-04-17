@@ -58,9 +58,6 @@ app.post('/restaurants', (req, res) => {
 })
 
 app.get('/search', (req, res) => {
-  // const results = restaurantList.results
-  // const keyword = req.query.keyword
-  
   const keywords = req.query.keyword
   const keyword = req.query.keyword.trim().toLowerCase()
 
@@ -68,12 +65,6 @@ app.get('/search', (req, res) => {
   if (!keyword || keyword.trim()==="") {
     return res.redirect("/")
   }
-
-  // const searchRestaurant = results.filter( result => 
-  //   result.name.toLowerCase().includes(keyword.toLowerCase()) ||
-  //   result.category.includes(keyword)
-  // )
-  // res.render('index', { restaurants: searchRestaurant,keyword: keyword })
 
   Restaurant.find({})
     .lean()
