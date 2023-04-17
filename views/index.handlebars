@@ -26,6 +26,7 @@
 <!-- restaurant list -->
 <div class="container mt-5">
   <div class="row">
+    {{#if restaurantsData}}
     <div class="col-md-10 col-12 mx-auto">
       <div class="row row-cols-sm-3">
         {{#each restaurantsData}}
@@ -63,5 +64,12 @@
         {{/each}}
       </div>
     </div>
+    {{!-- 找不到結果時顯示如下 --}}
+    {{else}}
+    <div class="d-flex justify-content-end flex-column align-items-center m-3">
+      <h3 class="mb-3">我們搜遍了資料庫的每寸角落，也找不到包含「{{keywords}}」關鍵字的餐廳</h3>
+      <h6>「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</h6>
+    </div>
+    {{/if}}
   </div>
 </div>

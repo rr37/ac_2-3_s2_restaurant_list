@@ -7,7 +7,6 @@ const mongoose = require('mongoose')
 const Restaurant = require('./models/restaurant')
 // 引用 body-parser
 const bodyParser = require('body-parser')
-const restaurant = require('./models/restaurant')
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
@@ -59,19 +58,37 @@ app.post('/restaurants', (req, res) => {
 })
 
 app.get('/search', (req, res) => {
-  const results = restaurantList.results
-  const keyword = req.query.keyword
+  // const results = restaurantList.results
+  // const keyword = req.query.keyword
+  
+  const keywords = req.query.keyword
+  const keyword = req.query.keyword.trim().toLowerCase()
 
   //當無輸入資料或輸入空格時導至主畫面
   if (!keyword || keyword.trim()==="") {
     return res.redirect("/")
   }
 
-  const searchRestaurant = results.filter( result => 
-    result.name.toLowerCase().includes(keyword.toLowerCase()) ||
-    result.category.includes(keyword)
-  )
-  res.render('index', { restaurants: searchRestaurant,keyword: keyword })
+  // const searchRestaurant = results.filter( result => 
+  //   result.name.toLowerCase().includes(keyword.toLowerCase()) ||
+  //   result.category.includes(keyword)
+  // )
+  // res.render('index', { restaurants: searchRestaurant,keyword: keyword })
+
+  Restaurant.find({})
+    .lean()
+    .then(restaurantsData => {
+      const filterRestaurantsData = restaurantsData.filter(
+        data =>
+          data.name.toLowerCase().includes(keyword) ||
+          data.category.includes(keyword)
+      )
+      res.render('index', {
+        restaurantsData: filterRestaurantsData,
+        keywords
+      })
+    })
+    .catch(err => console.log(err))
 })
 
 app.get('/restaurants/:id', (req, res) => {
